@@ -98,3 +98,45 @@ plot(p224r63_2011$B3_sre, col=clr)
 #si plotta la banda dell' infrarosso
 clnir <- colorRampPalette(c("red","orange","yellow")) (100)
 plot(p224r63_2011$B4_sre, col=clnir)
+
+#Day 4
+#Visualizing data by RGB plotting
+#richiamare il pacchetto e i dati della cartella che utilizziamo
+library (raster)
+setwd("C:/lab/")
+# si associa il nome e si richima l' immagine
+p224r63_2011 <- brick("p224r63_2011_masked.grd")
+#Bande Landsat
+#B1: banda del blu
+#B2: banda del verde
+#B3: banda del rosso
+#B4: infrarosso vicino
+#B5: infrarosso medio
+#B6: infrarosso lontano (termico)
+#B7: infrarosso medio
+#RGB->colori fondamentali di visualizzazione delle immagini con stretch lineare
+ 
+plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
+ #si utilizza l' infrarosso vicino montandolo sulla componente red dello schema RGB
+plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
+#mettiamo sulla banda del verde l' infrarosso
+plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin")
+#si mette l' infrarosso nella banda blu
+plotRGB(p224r63_2011, r=3, g=2, b=4, stretch="Lin")
+#si fa il par delle diverse immagini 2x2 con le bande assegnate in precedenza
+pdf("il_mio_primoPDF_inR.pdf") #salva l' immagine in formato pdf
+par(mfrow=c(2,2))
+plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
+plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
+plotRGB(p224r63_2011, r=3, g=2, b=4, stretch="Lin")
+dev.off()
+
+plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin")
+plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="hist") #stretch histogram che tira ancora di più i colori
+#par with natural colours, flase colours and false colours with hisogram stretching 
+par(mfrow=c(3,1))
+plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
+plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin")
+plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="hist")
+
+
