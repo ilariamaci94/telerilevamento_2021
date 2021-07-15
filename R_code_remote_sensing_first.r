@@ -59,6 +59,42 @@ dev.off()
 #si utilizza par per inserire le bande che vogliamo noi, è una funzione generica per fare un settaggio dei parametri di un certo grafico da creare
 #si plotta il grafico con la banda del blu e quella del verde accanto si fa un multifrime (mf)->par, altrimenti sovrascriverebbe
 #par inserisce le immagini in una sola riga e due colonne, si si vogliono due righe e una colonna si invertono i numeri in parentesi
+#1 row, 2 columns
 par(mfrow=c(1,2))
 plot(p224r63_2011$B1_sre)
 plot(p224r63_2011$B2_sre)
+#2 rows, 1 column
+#se si vuole usare come primo numero del comando le colonne sarà => par(mfcol=c(...,...))
+par(mfrow=c(2,1))
+plot(p224r63_2011$B1_sre)
+plot(p224r63_2011$B2_sre)
+
+#plottiamo le prime 4 bande di Landsat su 4 righe e una colonna
+par(mfrow=c(4,1))
+plot(p224r63_2011$B1_sre)
+plot(p224r63_2011$B2_sre)
+plot(p224r63_2011$B3_sre)
+plot(p224r63_2011$B4_sre)
+
+#disporre le immagini in modo di distribuirle in configurazione 2x2
+par(mfrow=c(2,2))
+plot(p224r63_2011$B1_sre)
+plot(p224r63_2011$B2_sre)
+plot(p224r63_2011$B3_sre)
+plot(p224r63_2011$B4_sre)
+
+#bande in rappresentazione 2x2
+par(mfrow=c(2,2))
+# per ogni banda si da una colorRampPalette che riporta a quella banda
+#si plotta la banda del blu
+clb <- colorRampPalette(c("dark blue","blue","light blue")) (100)
+plot(p224r63_2011$B1_sre, col=clb)
+#si plotta la banda del verde
+clg <- colorRampPalette(c("dark green","green","light green")) (100)
+plot(p224r63_2011$B2_sre, col=clg)
+#si plotta la banda del rosso
+clr <- colorRampPalette(c("dark red","red","pink")) (100)
+plot(p224r63_2011$B3_sre, col=clr)
+#si plotta la banda dell' infrarosso
+clnir <- colorRampPalette(c("red","orange","yellow")) (100)
+plot(p224r63_2011$B4_sre, col=clnir)
