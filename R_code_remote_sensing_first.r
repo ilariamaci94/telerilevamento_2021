@@ -23,7 +23,7 @@ cl <- colorRampPalette(c("black","grey","light grey")) (100)
 #si plotta l' immagine con la scala di colori che abbiamo creato
 plot(p224r63_2011, col=cl)
 #nuova scala di colori
-cl <- colorRampPalette(c("red","orange","pink","blue","yellow")) (100)
+cl <- colorRampPalette(c("red","pink","yellow","blue","green")) (100)
 plot(p224r63_2011, col=cl)
 
 #Day 3
