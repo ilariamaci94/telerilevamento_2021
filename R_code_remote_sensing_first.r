@@ -23,7 +23,7 @@ cl <- colorRampPalette(c("black","grey","light grey")) (100)
 #si plotta l' immagine con la scala di colori che abbiamo creato
 plot(p224r63_2011, col=cl)
 #nuova scala di colori
-cl <- colorRampPalette(c("red","pink","yellow","blue","green")) (100)
+cl <- colorRampPalette(c("purple","pink","yellow","blue","green")) (100)
 plot(p224r63_2011, col=cl)
 
 #Day 3
@@ -33,7 +33,8 @@ setwd("C:/lab/")
 # si associa il nome e si richima l' immagine
 p224r63_2011 <- brick("p224r63_2011_masked.grd")
 #si plotta l' immagine con la scala di colori assegnata 
-cl <- colorRampPalette(c("red","orange","pink","blue","yellow")) (100)
+cl <- colorRampPalette(c("purple","pink","yellow","blue","green")) (100)
+#il nome dell' immagine indica con "p224" il percorso e quindi il numero della sinusoide e con "r" i paralleli e il numero associato ad essi 
 plot(p224r63_2011, col=cl)
 
 #Bande Landsat
@@ -56,9 +57,9 @@ cls <- colorRampPalette(c("red","orange","pink","blue","yellow")) (100)
 plot(p224r63_2011, col=cls)
 # si chiude la grafica
 dev.off()
-#si utilizza par per inserire le bande che vogliamo noi, è una funzione generica per fare un settaggio dei parametri di un certo grafico da creare
-#si plotta il grafico con la banda del blu e quella del verde accanto si fa un multifrime (mf)->par, altrimenti sovrascriverebbe
-#par inserisce le immagini in una sola riga e due colonne, si si vogliono due righe e una colonna si invertono i numeri in parentesi
+#si utilizza "par" per plottare le bande che vogliamo noi, è una funzione generica per fare un settaggio dei parametri di un certo grafico da creare
+#si plotta il grafico con la banda del blu e quella del verde accanto si fa un multifreme (mf)->par, altrimenti sovrascriverebbe
+#"par" inserisce le immagini in una sola riga e due colonne, se si vogliono due righe e una colonna si invertono i numeri in parentesi
 #1 row, 2 columns
 par(mfrow=c(1,2))
 plot(p224r63_2011$B1_sre)
@@ -76,7 +77,7 @@ plot(p224r63_2011$B2_sre)
 plot(p224r63_2011$B3_sre)
 plot(p224r63_2011$B4_sre)
 
-#disporre le immagini in modo di distribuirle in configurazione 2x2
+#disporre le immagini in modo di distribuirle in configurazione quadrata 2x2
 par(mfrow=c(2,2))
 plot(p224r63_2011$B1_sre)
 plot(p224r63_2011$B2_sre)
@@ -114,10 +115,12 @@ p224r63_2011 <- brick("p224r63_2011_masked.grd")
 #B5: infrarosso medio
 #B6: infrarosso lontano (termico)
 #B7: infrarosso medio
-#RGB->colori fondamentali di visualizzazione delle immagini con stretch lineare
+#RGB->colori fondamentali di visualizzazione delle immagini con stretch lineare (schema di colori per mostrare le immagini in colori naturali)- tre bande per volta!
  
+#si plotta l' immagine in "RGB: Red-Green-Blue plot of a multi-layered Raster object" 
+# "stretch": distensione delle bande portando con la combinazione lineare i valori di riflettanza da 0 a 1;
 plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
- #si utilizza l' infrarosso vicino montandolo sulla componente red dello schema RGB
+ #si utilizza l' infrarosso vicino montandolo sulla componente red dello schema RGB.la vegetazione diventa rossa.
 plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
 #mettiamo sulla banda del verde l' infrarosso
 plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin")
@@ -128,12 +131,14 @@ pdf("il_mio_primoPDF_inR.pdf") #salva l' immagine in formato pdf
 par(mfrow=c(2,2))
 plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
 plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
+plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin")
 plotRGB(p224r63_2011, r=3, g=2, b=4, stretch="Lin")
 dev.off()
 
 plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin")
-plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="hist") #stretch histogram che tira ancora di più i colori
+plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="hist") #stretch histogram che tira ancora di più i colori per analizzare tutte le componenti all' interno della foresta
 #par with natural colours, flase colours and false colours with hisogram stretching 
+#si dispongono le immagini su tre righe e una colonna per notare le differenze tra le diverse visualizzazioni
 par(mfrow=c(3,1))
 plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
 plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin")
