@@ -166,7 +166,7 @@ par(mfrow=c(2,1))
 plotRGB(p224r63_1988, r=4, g=3, b=2, stretch="Lin")
 plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
 #plotto le immagini sia con lo stretch lineare che histogram con rappresentazione quadrata
-pdf("multitemp.pdf")
+pdf("multitemp.pdf") #salvo il plot in pdf
 par(mfrow=c(2,2))
 plotRGB(p224r63_1988, r=4, g=3, b=2, stretch="Lin")
 plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
