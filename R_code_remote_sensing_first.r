@@ -143,6 +143,8 @@ par(mfrow=c(3,1))
 plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
 plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin")
 plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="hist")
+#si installa il pacchetto in R "RStoolbox"
+install.packages("RStoolbox")
 
 #Day 5
 #si richiama il pacchetto raster da utilizzare
