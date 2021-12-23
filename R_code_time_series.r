@@ -47,38 +47,43 @@ plot(TGr)
 plotRGB(TGr, 1, 2, 3, stretch="Lin") 
 plotRGB(TGr, 2, 3, 4, stretch="Lin") 
 
-#installazione pacchetto metodi di visualizzazione per dati raster
+#installazione pacchetto rasterVis per la visualizzazione dei dati raster
 install.packages("rasterVis") 
 library(rasterVis)
-setwd("D:/lab/greenland")
-rlist <- list.files(pattern="lst")
+#richiamo le funzioni precedenti
+setwd("C:/lab/Greenland")
+rlist <- list.files(pattern="lst") #lista file
 rlist
 import <- lapply(rlist,raster)
 import
 TGr <- stack(import)
 TGr
-# levelplots R package: utilizziamo un intero blocco con una singola legenda e plottiamo tutto insieme
+# levelplots R package: si ha un unica legenda per tutto il blocco di immagini a disposizione con gamma di colori più compatta
 levelplot(TGr)
+#si cambia la colorRampPalette
 cl <- colorRampPalette(c("blue","light blue","pink","red"))(100)
-#poi riplottare
+#si riplotta con il colore cambiato
 levelplot(TGr, col.regions=cl)
-#possiamo cambiare i titoli delle immagini con la funzione names.attr (per nominare i singoli attributi)
-#main è l'argomento, quindi nel nostro caso il titolo dellla mappa, messo tra virgolette perchè un testo
+#si possono cambiare i titoli delle immagini con la funzione names.attr (per nominare i singoli attributi)
+#main è l'argomento, quindi in questo caso il titolo della mappa, messo tra virgolette perchè è un testo
 levelplot(TGr,col.regions=cl, main="LST variation in time",names.attr=c("July 2000","July 2005", "July 2010", "July 2015"))
-#dati melt, creiamo una lista dei file con pattern comune "melt" o "annual"
+#dati melt, si crea una lista dei file con pattern comune "melt" o "annual"
 meltlist <- list.files(pattern="melt")
-#importo i file
+#si applica la funzione "lapply" alla lista appena creata e si applica la funzione raster
+#si da un nome all' oggetto che contiene la funzione "lapply"
 melt_import <- lapply(meltlist,raster)
-#raggruppo i file importati
+#raggruppo i file importati con la funzione "stack"
 melt <- stack(melt_import)
 melt
-#posso fare un level plot solo ora con dati melt
+#faccio un level plot 
 levelplot(melt)
-#valori più alti >scioglimento
-#metricsalgebra applicato alle matrici per lo studio di dati temporali, facciamo la sottrazione tra primo e ultimo dato, mettiamo $ per legare uno strato all'altro
+#valori più alti indicano un maggiore scioglimento
+#si effettua una sottrazione tra il primo e il secondo dato associando al risultato un nome
+#mettiamo $ per legare ogni raster interno al proprio file
 melt_amount <- melt$X2007annual_melt - melt$X1979annual_melt
-#creo una nuova colorramppalette
+#creo una nuova colorRampPalette
 clb <- colorRampPalette(c("blue","white","red"))(100)
 #sia plot che levelplot
-plot(melt_amount, col=clb)
+plot(melt_amount, col=clb) #tutte le zone rosse sono quelle che dal 2007 al 1979 riguardano uno scioglimento più alto
+#si fa un level plot
 levelplot(melt_amount, col.regions=clb)
