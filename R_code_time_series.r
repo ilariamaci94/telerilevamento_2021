@@ -43,9 +43,10 @@ TGr <- stack(import)
 #serve per ottenere il plot di tutti i file insieme per facilitare la visualizzazione
 plot(TGr)
 
-#immagini sovrapposte con schema RGB
-plotRGB(TGr, 1, 2, 3, stretch="Lin")
-plotRGB(TGr, 2, 3, 4, stretch="Lin") #plot con valori della temperatura
+#immagini sovrapposte con schema RGB associando le immagini di temperatura alle bande del rosso, del verde e nel blu
+plotRGB(TGr, 1, 2, 3, stretch="Lin") 
+plotRGB(TGr, 2, 3, 4, stretch="Lin") 
+
 #installazione pacchetto metodi di visualizzazione per dati raster
 install.packages("rasterVis") 
 library(rasterVis)
