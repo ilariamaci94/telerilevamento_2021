@@ -6,7 +6,8 @@
 setwd("C:/lab/")
 
 #installo il pacchetto 
-install.packages("knitr")
+#install.packages("knitr")
 
-#richiamo il pacchetto con require
-require(knitr)
+#richiamo il pacchetto
+library(knitr)
+stitch("R_code_greenland.r", template=system.file("misc", "knitr-template.Rnw", package="knitr"))
