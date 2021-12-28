@@ -36,9 +36,6 @@ sunc <- unsuperClass(sun, nClasses=20)
 plot(sunc$map)
 
 #classificazione immagini grand canyon data 
-library(raster)
-library(RStoolbox)
-setwd("D:/lab/")
 #caricare immagine RGB 
 gc <- brick("dolansprings_oli_2013088_canyon_lrg.jpg")
 #visualizziamo l'immagine
