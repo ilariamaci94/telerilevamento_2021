@@ -45,7 +45,7 @@ plotRGB(gc, r=1,g=2,b=3, stretch="lin")
 plotRGB(gc, r=1,g=2,b=3, stretch="hist")
 #utilizziamo la classificazione del pacchetto in tre classi
 gcc <- unsuperClass(gc, nClasses=3)
-#fare il plot dell'immagine
+#fare il plot dell'immagine legando la mappa al modello
 plot(gcc$map)
 #facciamo la classificazione in quattro classi e successivo plot dell' immagine
 gcc4 <- unsuperClass(gc, nClasses=4)
