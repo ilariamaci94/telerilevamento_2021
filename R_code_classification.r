@@ -36,16 +36,17 @@ sunc <- unsuperClass(sun, nClasses=20)
 plot(sunc$map)
 
 #classificazione immagini grand canyon data 
-#caricare immagine RGB 
+
+#caricare immagine RGB con i tre livelli attraverso il comando brick
 gc <- brick("dolansprings_oli_2013088_canyon_lrg.jpg")
-#visualizziamo l'immagine
+#visualizziamo l'immagine con stretch lineare
 plotRGB(gc, r=1,g=2,b=3, stretch="lin")
-#cambiamo il tipo di stretch in histogram
+#cambiamo il tipo di stretch in histogram che crea un effetto ancora più alto 
 plotRGB(gc, r=1,g=2,b=3, stretch="hist")
-#utilizziamo la classificazione del pacchetto
+#utilizziamo la classificazione del pacchetto in tre classi
 gcc <- unsuperClass(gc, nClasses=3)
 #fare il plot dell'immagine
 plot(gcc$map)
-#facciamo la classificazione in 4 classi
+#facciamo la classificazione in quattro classi e successivo plot dell' immagine
 gcc4 <- unsuperClass(gc, nClasses=4)
 plot(gcc4$map)
