@@ -69,10 +69,11 @@ plot(difndvi, col=cld)
 #install.packages("rasterdiv")
 library(rasterdiv) #per lavorare con NDVI 
 
-#copertura globale NDVI, farne un plot
+#si plotta la copertura globale NDVI
 plot(copNDVI)
-#possiamo eliminare i pixel con cbind e i valori che non ci interessano (acqua) vengono riclassificati con reclassify
-copNDVI <- reclassify (copNDVI, cbind (252, 255, NA))
+#si possono cambiare i pixel dei valori che non interessano (acqua) con "cbind", trasformandoli in NA 
+#viene riclassificata l'immagine
+copNDVI <- reclassify (copNDVI, cbind (253:255, NA))
 plot(copNDVI)
 #utilizziamo levevlplot contenuto in rastervis per originare i livelli, perciò richiamiamo la libreria
 library(rasterVis)
