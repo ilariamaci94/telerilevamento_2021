@@ -4,9 +4,10 @@
 
 library(raster)
 library(RStoolbox)
-library(ggplot2)
-library(gridExtra)
-library(viridis) 
+library(ggplot2) #per usare le funzioni di ggplot2
+library(gridExtra) #per mettere insieme più plot di ggplot2
+#install.packages("viridis")
+library(viridis) #serve per colorare i plot di ggplot2 in automatico
 
 #fare il set della working directory
 setwd("C:/lab/")
@@ -61,6 +62,7 @@ ndvisd5 <- focal(ndvi, w=matrix(1/25, nrow=5, ncol=5), fun=sd)
 clsd <- colorRampPalette(c('blue','green','pink','magenta','orange','brown','red','yellow'))(100)
 plot(ndvisd5, col=clsd)
 
+#PCA
 #altra tecnica per compattare i dati è quella del calcolo del PCA, con rasterPCA: analisi componente principale per raster
 sentpca <- rasterPCA(sent) 
 plot(sentpca$map)
@@ -69,29 +71,34 @@ plot(sentpca$map)
 #vediamo la proporzione di variabilità del modello di ogni singola componente, dove la prima contiene il 67.36804% dell'informazione originale
 summary(sentpca$model)
 
-#per l'analisi controlliamo le componenti della mappa all'interno di sent, e leghiamo il tutto alla prima variabile PC1
+#per l'analisi controlliamo le componenti della mappa all'interno di sent
+#prima componente PC1
 pc1 <- sentpca$map$PC1
-#pc1 verrà sempre associato alla funzione focal, dove invece dell'NDVI stiamo utilizzando pc1
+#pc1 verrà sempre associato alla funzione focal, dove invece dell'NDVI si utilizza pc1
 pc1sd5 <- focal(pc1, w=matrix(1/25, nrow=5, ncol=5), fun=sd)
+#cambio la colorRampPalette e visualizzo l' immagine
 clsd <- colorRampPalette(c('blue','green','pink','magenta','orange','brown','red','yellow'))(100)
 plot(pc1sd5, col=clsd)
 
-#funzione surce che salva il pezzo di codice da girare e lo facciamo partire in R,salviamo il pezzo di codice esternamente e lo possiamo poi importare a nostro piacimento
+#"surce" richiama un pezzo di codice che è stato già creato
+#si salva il codice che si vuole far girare e si fa partire dentro R
+
 #pc1 <- sentpca$map$PC1
 #pc1sd7 <- focal(pc1, w=matrix(1/49, nrow=7, ncol=7), fun=sd)
 #plot(pc1sd7)
 source("source_test_lezione.r") #sarà il calcolo di una DVstandard 7x7 su R
-#un intero script da poter richiamare in R con funzione surce
+#si può utilizzare un intero script da poter richiamare in R con funzione surce
 #con mappa della DVstandard, si usa gglot per plottare e con gridArrange li uniamo tutti insieme, occorre assicurarsi di avere la libreria ggplot2 per questo ora si aggiunge, inseme a GridExtra e Viridis (per i colori in ggplot) 
 source("source_ggplot.r")
 
 
 # https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html
-#creare la finestra in ggplot2,con funzione ggplot, dove inseriamo dei blocchi definendo la geometria della mappa, defianiamo i mapping e le aestetics (lo strato o layer)
+#creare la finestra in ggplot2,con funzione ggplot, dove inseriamo dei blocchi definendo la geometria della mappa
+#defianiamo i mapping e le aestetics (lo strato o layer)
 #associamo ogni plot a un oggetto
 p1 <- ggplot() +
 geom_raster(pc1sd5, mapping = aes(x = x, y = y, fill = layer)) +
-# Il pacchetto Viridis contiene otto scale di colori: "viridis", la scelta primaria, e cinque alternative con proprietà simili - "magma", "plasma", "inferno", "civids", "mako" e "razzo" - e una mappa dei colori dell'arcobaleno - "turbo".
+# Il pacchetto viridis contiene otto scale di colori: "viridis", la scelta primaria, e cinque alternative con proprietà simili - "magma", "plasma", "inferno", "civids", "mako" e "razzo" - e una mappa dei colori dell'arcobaleno - "turbo".
 scale_fill_viridis()  +
 #aggiungiamo un titolo
 ggtitle("Standard deviation of PC1 by viridis colour scale")
@@ -107,5 +114,5 @@ geom_raster(pc1sd5, mapping = aes(x = x, y = y, fill = layer)) +
 scale_fill_viridis(option = "turbo")  +
 ggtitle("Standard deviation of PC1 by turbo colour scale")
 
-#con la funzione grid .arrange metto insieme le tre legende, definendo una sola riga
+#con la funzione grid.arrange metto insieme i tre plot con le tre legende, tutto su una sola riga
 grid.arrange(p1, p2, p3, nrow = 1)
