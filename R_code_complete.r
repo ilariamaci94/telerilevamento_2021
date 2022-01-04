@@ -28,7 +28,7 @@ setwd("C:/lab/")
 library(raster)
 
 #inseirire i dati della cartella lab all' interno di R
-#brick importa l' immagine satellitare
+#brick importa tutte le bande dell' immagine satellitare
 #con la freccia si assegna un nome all' oggetto, il file è esterno ad R e si usano le virgolette
 p224r63_2011 <- brick("p224r63_2011_masked.grd")
 #vedere le caratteristiche del file
