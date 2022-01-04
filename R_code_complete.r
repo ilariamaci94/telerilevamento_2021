@@ -335,7 +335,7 @@ setwd("C:/lab/")
 
 #richiamo il pacchetto
 library(knitr)
-#con "stitch" si utilizza uno script di R generando un pdf in versione di report, si enera in maniera automatica
+#con "stitch" si utilizza uno script di R generando un pdf in versione di report, si genera in maniera automatica
 stitch("R_code_greenland.r", template=system.file("misc", "knitr-template.Rnw", package="knitr"))
 
 #-----------------------------------------------
@@ -451,21 +451,28 @@ plot(gcc4$map)
 
 # 7. R code ggplot2
 
+#richiamo i pacchetti necessari all' analisi 
 library(raster)
 library(RStoolbox)
 library(ggplot2)
 library(gridExtra)
 
-setwd("~/lab/")
+#settaggio della working directory
+setwd("C:/lab/")
 
+#importo l' intero pacchetto di immagine con brick
 p224r63 <- brick("p224r63_2011_masked.grd")
-
+#partendo da tre bande dell'immagine satellitare, possiamo unirle per creare un immagine a banda singola
 ggRGB(p224r63,3,2,1, stretch="lin")
 ggRGB(p224r63,4,3,2, stretch="lin")
 
+#multiframe con ggplot2 e gridExtra
+#grid.arrange mette insieme vari pezzi all'interno del grafico
+#diamo un nome ai plot
 p1 <- ggRGB(p224r63,3,2,1, stretch="lin")
 p2 <- ggRGB(p224r63,4,3,2, stretch="lin")
 
+#mettere insieme i due plot in due righe
 grid.arrange(p1, p2, nrow = 2) # this needs gridExtra
 
 #-----------------------------------------------
