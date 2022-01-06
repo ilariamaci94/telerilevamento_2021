@@ -360,7 +360,7 @@ plot(p224r63_2011$B1_sre,p224r63_2011$B2_sre, col="red", pch=19, cex=2)
 #invertiamo le due bande sugli assi 
 plot(p224r63_2011$B2_sre,p224r63_2011$B1_sre, col="red", pch=19, cex=2)
 #con la funzione pairs possiamo plottare tutte le correlazioni possibili di una serie di variabili di un dataset a due a due
-#varranno visualizzati anche gli indici di correlazione che varia tra -1 e 1 dove più le bande sono correlate(tendono a 1) più le dimensioni del carattere è maggiore
+#verranno visualizzati anche gli indici di correlazione che varia tra -1 e 1 dove più le bande sono correlate(tendono a 1) più le dimensioni del carattere è maggiore
 pairs(p224r63_2011)
 
 
