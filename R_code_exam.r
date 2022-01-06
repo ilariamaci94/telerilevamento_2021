@@ -5,6 +5,22 @@ setwd("C:/lab/esame")
 library(raster)
 library(RStoolbox)
 
+#differenza tra le due immagini
+riu1984 <- raster("riumarspain_oli_1984306_lrg.jpg")
+riu2021 <- raster("riumarspain_oli_2021311_lrg.jpg")
+plot(riu1984)
+plot(riu2021)
+
+#1. differenza tra le immagini
+#plottare l' immagine con una ColorRampPalette differente
+cl <- colorRampPalette(c("magenta","pink", "white","light blue","blue","green")) (100)
+plot(riu1984, col=cl)
+plot(riu2021, col=cl)
+#faccio la differenza tra le due immagini
+riu_dif <- riu2021-riu1984
+plot(riu_dif, col=cl)
+
+#PCA
 #richiamo l' intero pacchetto delle due immagini e le plotto insieme con lo schema RGB
 riumar1984 <- brick("riumarspain_oli_1984306_lrg.jpg")
 riumar2021 <- brick("riumarspain_oli_2021311_lrg.jpg")
