@@ -87,3 +87,39 @@ par(mfrow=c(2,1))
 plotRGB(riumar1984_res_pca$map, r=1,g=2,b=3, stretch="lin")
 plotRGB(riumar2021_res_pca$map, r=1,g=2,b=3, stretch="lin")
 #colori legati alle tre componenti 
+
+#3. calcolo NDVI
+#visualizzo i dettagli delle immagini
+riumar1984
+riumar2021  
+
+#faccio un plot RGB
+# b1=NIR, b2=red, b3=green
+par(mfrow=c(2,1))
+plotRGB(riumar1984, r=1, g=2, b=3, stretch="lin")
+plotRGB(riumar2021, r=1, g=2, b=3, stretch="lin")
+
+#NDVI per la prima immagine
+ndvi1 <- (riumar1984$riumarspain_oli_1984306_lrg.1 - riumar1984$riumarspain_oli_1984306_lrg.2) / (riumar1984$riumarspain_oli_1984306_lrg.1 + riumar1984$riumarspain_oli_1984306_lrg.2)
+cl <- colorRampPalette(c('darkblue','yellow','red','black'))(100) 
+plot(ndvi1, col=cl, main="NDVI 1984")
+#NDVI per la seconda immagine
+ndvi2 <- (riumar2021$riumarspain_oli_2021311_lrg.1 - riumar2021$riumarspain_oli_2021311_lrg.2) / (riumar2021$riumarspain_oli_2021311_lrg.1 + riumar2021$riumarspain_oli_2021311_lrg.2) 
+plot(ndvi2, col=cl, main="NDVI 2021")
+
+#si effettua la differenza per i due indici NDVI 
+difndvi <- ndvi1 - ndvi2
+dev.off()
+cld <- colorRampPalette(c('blue','white','red'))(100) 
+plot(difndvi, col=cld, main="Difference NDVI 1984-2021") 
+#dove si hanno differenze più marcate c'e il colore rosso
+
+#spectralIndices, si richiama l'immagine e le bande attraverso il numero che corrisponde alla banda
+vi1 <- spectralIndices(riumar1984, green=3, red=2, nir=1)
+plot(vi, col=cl)
+
+vi2 <- spectralIndices(riumar2021, green=3, red=2, nir=1)
+plot(vi, col=cl)
+
+#R_code land cover
+#R_code spectral signature
