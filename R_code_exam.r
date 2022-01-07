@@ -7,22 +7,28 @@ library(RStoolbox)
 library(ggplot2)
 library(gridExtra)
 
-#differenza tra le due immagini
+#1. differenza tra le due immagini
 riu1984 <- raster("riumarspain_oli_1984306_lrg.jpg")
 riu2021 <- raster("riumarspain_oli_2021311_lrg.jpg")
 plot(riu1984)
 plot(riu2021)
 
-#1. differenza tra le immagini
 #plottare l' immagine con una ColorRampPalette differente
 cl <- colorRampPalette(c("magenta","pink", "white","light blue","blue","green")) (100)
 plot(riu1984, col=cl)
 plot(riu2021, col=cl)
+
 #faccio la differenza tra le due immagini
-riu_dif <- riu2021-riu1984
+riu_dif <- riu1984-riu2021
 plot(riu_dif, col=cl)
 
-#PCA
+#plotto tutte e tre le immagini insieme con par
+par(mfrow=c(1,3))
+plot(riu1984, col=cl, main="foce nel 1984")
+plot(riu2021, col=cl, main="foce nel 2021")
+plot(riu_dif, col=cl, main="Differenza (1984-2021)")
+
+#2. PCA
 #richiamo l' intero pacchetto delle due immagini e le plotto insieme con lo schema RGB
 riumar1984 <- brick("riumarspain_oli_1984306_lrg.jpg")
 riumar2021 <- brick("riumarspain_oli_2021311_lrg.jpg")
