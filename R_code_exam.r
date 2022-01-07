@@ -4,6 +4,8 @@
 setwd("C:/lab/esame")
 library(raster)
 library(RStoolbox)
+library(ggplot2)
+library(gridExtra)
 
 #differenza tra le due immagini
 riu1984 <- raster("riumarspain_oli_1984306_lrg.jpg")
