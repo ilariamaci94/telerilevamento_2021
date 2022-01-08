@@ -6,6 +6,11 @@ library(raster)
 library(RStoolbox)
 library(ggplot2)
 library(gridExtra)
+library(viridis)
+
+#richiamo l' intero pacchetto delle due immagini e le plotto insieme con lo schema ggRGB
+riumar1984 <- brick("riumarspain_oli_1984306_lrg.jpg")
+riumar2021 <- brick("riumarspain_oli_2021311_lrg.jpg")
 
 #visualizzo le due immagini 
 #faccio un plot ggRGB
@@ -43,12 +48,21 @@ plot(riu_dif, col=cl, main="Differenza (1984-2021)")
 riumar1984
 riumar2021  
 
+#bande prima immagine 
+nir1 <- riumar1984$riumarspain_oli_1984306_lrg.1
+red1 <- riumar1984$riumarspain_oli_1984306_lrg.2
+
+#bande seconda immagine 
+nir2 <- riumar2021$riumarspain_oli_2021311_lrg.1
+red2 <- riumar2021$riumarspain_oli_2021311_lrg.2
+
 #NDVI per la prima immagine
-ndvi1 <- (riumar1984$riumarspain_oli_1984306_lrg.1 - riumar1984$riumarspain_oli_1984306_lrg.2) / (riumar1984$riumarspain_oli_1984306_lrg.1 + riumar1984$riumarspain_oli_1984306_lrg.2)
+ndvi1 <- (nir1-red1) / (nir1+red1)
 cl <- colorRampPalette(c('darkblue','yellow','red','black'))(100) 
 plot(ndvi1, col=cl, main="NDVI 1984")
+
 #NDVI per la seconda immagine
-ndvi2 <- (riumar2021$riumarspain_oli_2021311_lrg.1 - riumar2021$riumarspain_oli_2021311_lrg.2) / (riumar2021$riumarspain_oli_2021311_lrg.1 + riumar2021$riumarspain_oli_2021311_lrg.2) 
+ndvi2 <- (nir2-red2) / (nir2+red2)
 plot(ndvi2, col=cl, main="NDVI 2021")
 
 #si effettua la differenza per i due indici NDVI 
@@ -66,10 +80,9 @@ plot(vi, col=cl)
 vi2 <- spectralIndices(riumar2021, green=3, red=2, nir=1)
 plot(vi, col=cl)
 
+
+
 #2. PCA
-#richiamo l' intero pacchetto delle due immagini e le plotto insieme con lo schema RGB
-riumar1984 <- brick("riumarspain_oli_1984306_lrg.jpg")
-riumar2021 <- brick("riumarspain_oli_2021311_lrg.jpg")
 
 #visualizzo i dettagli delle immagini
 riumar1984
@@ -81,8 +94,8 @@ plot(riumar1984, col=cl)
 plot(riumar2021, col=cl)
 
 #plotto i valori della banda 1 dei pixel contro i valori della banda 2 dei pixel
-plot(riumar1984$riumarspain_oli_1984306_lrg.1,riumar1984$riumarspain_oli_1984306_lrg.2, col="red", pch=19, cex=1)
-plot(riumar2021$riumarspain_oli_2021311_lrg.1,riumar2021$riumarspain_oli_2021311_lrg.2, col="red", pch=19, cex=1)
+plot(nir1, red1, col="red", pch=19, cex=1)
+plot(nir2, red2, col="red", pch=19, cex=1)
 
 #mettiamo in correlazione a due a due tutte le variabili di un certo set (le bande). correlazione tra la 1 e 2 del 98%
 pairs(riumar1984)
@@ -108,8 +121,12 @@ summary(riumar1984_res_pca$model)
 #Proportion of Variance  0.9671054  0.02927337 0.003621183
 #Cumulative Proportion   0.9671054  0.99637882 1.000000000
 
-#la PC1 spiega il 96,71% della varianza. ha tutta l' informazione
+#la PC1 spiega il 96,71% della varianza.
 plot(riumar1984_res_pca$map) 
+
+#names      :        PC1,        PC2,        PC3 
+#min values : -111.91039,  -97.35574,  -45.11867 
+#max values :  283.50405,   43.45958,   15.99450 
 
 summary(riumar2021_res_pca$model)
 #Importance of components:
@@ -120,10 +137,46 @@ summary(riumar2021_res_pca$model)
 #la PC1 spiega l'80 % della varianza.
 plot(riumar2021_res_pca$map)
 
+#names      :        PC1,        PC2,        PC3 
+#min values : -106.67379,  -81.95148,  -40.23151 
+#max values :  281.81734,   64.83229,   41.16321 
+
 #plot RGB dell'analisi sfruttando le componenti principali
 par(mfrow=c(2,1))
 plotRGB(riumar1984_res_pca$map, r=1,g=2,b=3, stretch="lin")
 plotRGB(riumar2021_res_pca$map, r=1,g=2,b=3, stretch="lin")
-#colori legati alle tre componenti 
-#R_code land cover
+#colori legati alle tre componenti
+
+#3.calcolo la variabilità locale all' interno di una mappa con la deviazione standard
+#si lavora su una singola banda e utilizzo la PC1
+
+#prima componente PC1 1984
+pc1_1984 <- riumar1984_res_pca$map$PC1
+pc1sd3_1984 <- focal(pc1_1984, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
+clsd <- colorRampPalette(c('blue','green','pink','magenta','orange','brown','red','yellow'))(100)
+plot(pc1sd3_1984, col=clsd)
+
+#prima componente PC1 2021
+pc1_2021 <- riumar2021_res_pca$map$PC1
+pc1sd3_2021 <- focal(pc1_2021, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
+clsd <- colorRampPalette(c('blue','green','pink','magenta','orange','brown','red','yellow'))(100)
+plot(pc1sd3_2021, col=clsd)
+
+par(mfrow=c(2,1))
+plot(pc1sd3_1984, col=clsd, main="deviazione standard 1984")
+plot(pc1sd3_2021, col=clsd, main="deviazione standard 2021") 
+
+#plotto con ggplot e i colori prestabiliti
+p1 <- ggplot() +
+geom_raster(pc1sd3_1984, mapping = aes(x = x, y = y, fill = layer)) +
+scale_fill_viridis(option = "magma")  +
+ggtitle("Standard deviation of PC1_1984")
+
+p2 <- ggplot() +
+geom_raster(pc1sd3_2021, mapping = aes(x = x, y = y, fill = layer)) +
+scale_fill_viridis(option = "magma")  +
+ggtitle("Standard deviation of PC1_2021")
+
+grid.arrange(p1,p2, nrow = 1)
+
 #R_code spectral signature
