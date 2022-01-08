@@ -82,7 +82,7 @@ plot(vi, col=cl)
 
 
 
-#2. PCA
+#3. PCA
 
 #visualizzo i dettagli delle immagini
 riumar1984
@@ -147,7 +147,7 @@ plotRGB(riumar1984_res_pca$map, r=1,g=2,b=3, stretch="lin")
 plotRGB(riumar2021_res_pca$map, r=1,g=2,b=3, stretch="lin")
 #colori legati alle tre componenti
 
-#3.calcolo la variabilità locale all' interno di una mappa con la deviazione standard
+#4.calcolo la variabilità locale all' interno di una mappa con la deviazione standard
 #si lavora su una singola banda e utilizzo la PC1
 
 #prima componente PC1 1984
