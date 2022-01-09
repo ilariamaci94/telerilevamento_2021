@@ -27,24 +27,21 @@ plot(riu1984)
 plot(riu2021)
 
 #plottare l' immagine con una ColorRampPalette differente
-cl <- colorRampPalette(c("magenta","pink", "white","light blue","blue","green")) (100)
-plot(riu1984, col=cl)
-plot(riu2021, col=cl)
+cl <- colorRampPalette(c("black", "purple", "magenta", "orange", "light yellow")) (100)
+par(mfrow=c(1,2))
+plot(riu1984, col=cl, main="1984")
+plot(riu2021, col=cl, main="2021")
 
 #faccio la differenza tra le due immagini
+cldif <- colorRampPalette(c("blue","white","red")) (100)
 riu_dif <- riu1984-riu2021
-plot(riu_dif, col=cl)
+plot(riu_dif, col=cldif, main="Differenza (1984-2021)")
 
-#plotto tutte e tre le immagini insieme con par
-par(mfrow=c(1,3))
-plot(riu1984, col=cl, main="foce nel 1984")
-plot(riu2021, col=cl, main="foce nel 2021")
-plot(riu_dif, col=cl, main="Differenza (1984-2021)")
 
 
 
 #2. calcolo NDVI
-#visualizzo i dettagli delle immagini
+#visualizzo i dettagli delle immagini per prendere la banda del nir e del red
 riumar1984
 riumar2021  
 
@@ -58,27 +55,29 @@ red2 <- riumar2021$riumarspain_oli_2021311_lrg.2
 
 #NDVI per la prima immagine
 ndvi1 <- (nir1-red1) / (nir1+red1)
-cl <- colorRampPalette(c('darkblue','yellow','red','black'))(100) 
-plot(ndvi1, col=cl, main="NDVI 1984")
 
 #NDVI per la seconda immagine
 ndvi2 <- (nir2-red2) / (nir2+red2)
+
+#plotto le immagini insieme per i due ndvi
+par(mfrow=c(1,2))
+cl <- colorRampPalette(c('darkblue','yellow','red','black'))(100) 
+plot(ndvi1, col=cl, main="NDVI 1984")
 plot(ndvi2, col=cl, main="NDVI 2021")
 
 #si effettua la differenza per i due indici NDVI 
 difndvi <- ndvi1 - ndvi2
-dev.off()
-cld <- colorRampPalette(c('blue','white','red'))(100) 
-plot(difndvi, col=cld, main="Difference NDVI 1984-2021") 
+dev.off() 
+plot(difndvi, col=cldif, main="Difference NDVI 1984-2021") 
 #dove si hanno differenze più marcate c'e il colore rosso
 
 #indice interessante NDWI
 #spectralIndices, si richiama l'immagine e le bande attraverso il numero che corrisponde alla banda
 vi1 <- spectralIndices(riumar1984, green=3, red=2, nir=1)
-plot(vi, col=cl)
+plot(vi1, col=cl)
 
 vi2 <- spectralIndices(riumar2021, green=3, red=2, nir=1)
-plot(vi, col=cl)
+plot(vi2, col=cl)
 
 
 
@@ -89,7 +88,7 @@ riumar1984
 riumar2021  
 
 #plotto le tre bande con una colorRampPalette
-cl <- colorRampPalette(c("yellow","orange","magenta","purple","blue")) (100)
+cl <- colorRampPalette(c("blue","purple","magenta","orange","yellow")) (100)
 plot(riumar1984, col=cl)
 plot(riumar2021, col=cl)
 
