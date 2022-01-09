@@ -93,6 +93,7 @@ plot(riumar1984, col=cl)
 plot(riumar2021, col=cl)
 
 #plotto i valori della banda 1 dei pixel contro i valori della banda 2 dei pixel
+par(mfrow=c(2,1))
 plot(nir1, red1, col="red", pch=19, cex=1)
 plot(nir2, red2, col="red", pch=19, cex=1)
 
@@ -100,82 +101,70 @@ plot(nir2, red2, col="red", pch=19, cex=1)
 pairs(riumar1984)
 pairs(riumar2021)
 
-#dato che la PCA è un analisi impattante aggreghiamo il dato facendo la media per avere una risoluzione più bassa
-riumar1984_res <- aggregate(riumar1984, fact=10) #si passa da un pixel di 30 metri a uno di 300 metri
-riumar2021_res <- aggregate(riumar2021, fact=10)
-#plotto le immagini con risoluzione minore
-par(mfrow=c(2,1))
-plotRGB(riumar1984_res, r=1, g=2, b=3, stretch="lin")
-plotRGB(riumar2021_res, r=1, g=2, b=3, stretch="lin")
+
 #si procede con l' analisi PCA
 #rasterPCA: prende il pacchetto di dati e lo compatta in un numero minore di bande
-riumar1984_res_pca <- rasterPCA(riumar1984_res)
-riumar2021_res_pca <- rasterPCA(riumar2021_res)
+riumar1984_pca <- rasterPCA(riumar1984)
+riumar2021_pca <- rasterPCA(riumar2021)
 
 #visualizzo la varianza delle bande fornendo un sommario del modello che si è generato con la pca
-summary(riumar1984_res_pca$model)
-#Importance of components:
-#                           Comp.1      Comp.2      Comp.3
-#Standard deviation     90.2810304 15.70709890 5.524396191
-#Proportion of Variance  0.9671054  0.02927337 0.003621183
-#Cumulative Proportion   0.9671054  0.99637882 1.000000000
-
-#la PC1 spiega il 96,71% della varianza.
-plot(riumar1984_res_pca$map) 
-
-#names      :        PC1,        PC2,        PC3 
-#min values : -111.91039,  -97.35574,  -45.11867 
-#max values :  283.50405,   43.45958,   15.99450 
-
-summary(riumar2021_res_pca$model)
+summary(riumar1984_pca$model)
 #Importance of components:
 #                           Comp.1     Comp.2     Comp.3
-#Standard deviation     63.8952022 30.4745884 8.96954576
-#Proportion of Variance  0.8018062  0.1823932 0.01580061
-#Cumulative Proportion   0.8018062  0.9841994 1.00000000
-#la PC1 spiega l'80 % della varianza.
-plot(riumar2021_res_pca$map)
+#Standard deviation     98.9142738 18.8170131 7.77149819
+#Proportion of Variance  0.9593591  0.0347188 0.00592206
+#Cumulative Proportion   0.9593591  0.9940779 1.00000000
 
-#names      :        PC1,        PC2,        PC3 
-#min values : -106.67379,  -81.95148,  -40.23151 
-#max values :  281.81734,   64.83229,   41.16321 
+#la PC1 spiega il 95,93% della varianza.
+plot(riumar1984_pca$map) 
+
+#names      :       PC1,       PC2,       PC3 
+#min values : -120.0320, -175.7210, -135.0795 
+#max values :  297.3841,  132.9909,  116.5419 
+
+summary(riumar2021_pca$model)
+#Importance of components:
+#                          Comp.1     Comp.2      Comp.3
+#Standard deviation     75.587488 31.1996006 10.53050248
+#Proportion of Variance  0.840491  0.1431961  0.01631291
+#Cumulative Proportion   0.840491  0.9836871  1.00000000#Importance of components:
+
+plot(riumar2021_pca$map)
+
+#names      :       PC1,       PC2,       PC3 
+#min values : -112.4919, -123.4539,  -60.0841 
+#max values : 302.18501,  93.99771,  72.00665 
+
 
 #plot RGB dell'analisi sfruttando le componenti principali
-par(mfrow=c(2,1))
-plotRGB(riumar1984_res_pca$map, r=1,g=2,b=3, stretch="lin")
-plotRGB(riumar2021_res_pca$map, r=1,g=2,b=3, stretch="lin")
+c1 <-ggRGB(riumar1984_pca$map, r=1,g=2,b=3, stretch="lin") 
+c2 <-ggRGB(riumar2021_pca$map, r=1,g=2,b=3, stretch="lin") 
+grid.arrange(c1, c2, nrow=1)
 #colori legati alle tre componenti
 
 #4.calcolo la variabilità locale all' interno di una mappa con la deviazione standard
 #si lavora su una singola banda e utilizzo la PC1
 
 #prima componente PC1 1984
-pc1_1984 <- riumar1984_res_pca$map$PC1
+pc1_1984 <- riumar1984_pca$map$PC1
 pc1sd3_1984 <- focal(pc1_1984, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
-clsd <- colorRampPalette(c('blue','green','pink','magenta','orange','brown','red','yellow'))(100)
-plot(pc1sd3_1984, col=clsd)
 
 #prima componente PC1 2021
-pc1_2021 <- riumar2021_res_pca$map$PC1
+pc1_2021 <- riumar2021_pca$map$PC1
 pc1sd3_2021 <- focal(pc1_2021, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
-clsd <- colorRampPalette(c('blue','green','pink','magenta','orange','brown','red','yellow'))(100)
-plot(pc1sd3_2021, col=clsd)
 
-par(mfrow=c(2,1))
-plot(pc1sd3_1984, col=clsd, main="deviazione standard 1984")
-plot(pc1sd3_2021, col=clsd, main="deviazione standard 2021") 
 
 #plotto con ggplot e i colori prestabiliti
-p1 <- ggplot() +
+sd1 <- ggplot() +
 geom_raster(pc1sd3_1984, mapping = aes(x = x, y = y, fill = layer)) +
-scale_fill_viridis(option = "magma")  +
+scale_fill_viridis(option = "viridis")  +
 ggtitle("Standard deviation of PC1_1984")
 
-p2 <- ggplot() +
+sd2 <- ggplot() +
 geom_raster(pc1sd3_2021, mapping = aes(x = x, y = y, fill = layer)) +
-scale_fill_viridis(option = "magma")  +
+scale_fill_viridis(option = "viridis")  +
 ggtitle("Standard deviation of PC1_2021")
 
-grid.arrange(p1,p2, nrow = 1)
+grid.arrange(sd1,sd2, nrow = 1)
 
 #R_code spectral signature
