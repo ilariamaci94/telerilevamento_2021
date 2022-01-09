@@ -7,6 +7,7 @@ library(RStoolbox)
 library(ggplot2)
 library(gridExtra)
 library(viridis)
+library(rgdal)
 
 #richiamo l' intero pacchetto delle due immagini e le plotto insieme con lo schema ggRGB
 riumar1984 <- brick("riumarspain_oli_1984306_lrg.jpg")
@@ -142,7 +143,7 @@ c2 <-ggRGB(riumar2021_pca$map, r=1,g=2,b=3, stretch="lin")
 grid.arrange(c1, c2, nrow=1)
 #colori legati alle tre componenti
 
-#4.calcolo la variabilità locale all' interno di una mappa con la deviazione standard
+# 4.calcolo la variabilità locale all' interno di una mappa con la deviazione standard
 #si lavora su una singola banda e utilizzo la PC1
 
 #prima componente PC1 1984
@@ -167,4 +168,64 @@ ggtitle("Standard deviation of PC1_2021")
 
 grid.arrange(sd1,sd2, nrow = 1)
 
-#R_code spectral signature
+#5. spectral signature
+#analisi multitemporale calcolando la variabilità degli assi
+
+riumar1984 <- brick("riumarspain_oli_1984306_lrg.jpg")
+
+plotRGB(riumar1984, 1,2,3, stretch="Lin")
+#si creano le firme spettrali
+click(riumar1984, id=T, xy=T, cell=T, type="p", pch=16, col="magenta")
+#       x      y    cell riumarspain_oli_1984306_lrg.1 riumarspain_oli_1984306_lrg.2      riumarspain_oli_1984306_lrg.3
+#1  810.5  391.5 2757976                           197                           188                             155
+#2 1495.5  980.5 1589496                           194                           183                             155
+#3 1375.5 1000.5 1549676                           211                           201                             174
+#4 1182.5 1213.5 1126678                           187                           179                             156
+#5  966.5  471.5 2599332                           149                           163                             102
+ 
+
+riumar2021 <- brick("riumarspain_oli_2021311_lrg.jpg")
+plotRGB(riumar2021, r=1, g=2, b=3, stretch="Lin")
+click(riumar2021, id=T, xy=T, cell=T, type="p", pch=16, col="magenta")
+
+#       x      y    cell riumarspain_oli_2021311_lrg.1 riumarspain_oli_2021311_lrg.2
+#1  819.5  390.5 2759970                           106                           113
+#2 1471.5 1010.5 1529922                            48                           120
+#3 1375.5  991.5 1567541                           176                           158
+#4 1165.5 1224.5 1104826                           181                           170
+#5  948.5  457.5 2627104                           209                           202
+#  riumarspain_oli_2021311_lrg.3
+#1                            80
+#2                            96
+#3                           136
+#4                           138
+#5                           183
+
+#creo il dataset definiamo le colonne del dataset
+band <- c(1,2,3)
+time1_p1<- c(197,188,155)
+time1_p2<- c(194,183,155)
+time1_p3<- c(211,201,174)
+time1_p4<- c(187,179,156)
+time1_p5<- c(149,163,102)
+time2_p1 <- c(106,113,80)
+time2_p2 <- c(48,120,96)
+time2_p3 <- c(176,158,136)
+time2_p4 <- c(181,170,138)
+time2_p5 <- c(209,202,183)
+
+spectralst <- data.frame(band,time1_p1,time1_p2,time1_p3,time1_p4,time1_p5,time2_p1,time2_p2,time2_p3,time2_p4,time2_p5)
+spectralst
+
+ggplot(spectralst, aes(x=band)) + 
+    geom_line(aes(y = time1_p1), color = "red")+
+geom_line(aes(y = time1_p2), color = "blue") +
+geom_line(aes(y = time1_p3), color = "dark green") +
+geom_line(aes(y = time1_p4), color = "magenta") +
+geom_line(aes(y = time1_p5), color = "orange") +
+geom_line(aes(y = time2_p1), color = "red", linetype = "dotted")+ 
+geom_line(aes(y = time2_p2), color = "blue", linetype = "dotted")+
+geom_line(aes(y = time2_p3), color = "dark green", linetype = "dotted")+
+geom_line(aes(y = time2_p4), color = "magenta", linetype = "dotted")+
+geom_line(aes(y = time2_p5), color = "orange", linetype = "dotted")+
+ labs(x="band", y="reflectance")
